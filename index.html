@@ -18,7 +18,7 @@
     .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:850;letter-spacing:.06em}
     .logo{width:42px;height:42px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#052e16;font-size:23px}
     .brand small{display:block;color:#aab7af;font-size:10px;letter-spacing:.13em;font-weight:700}
-    .nav a.contact{background:#26352b;border:1px solid #405448;padding:9px 13px;border-radius:11px;text-decoration:none;font-size:13px;font-weight:700}
+    .nav .contact{background:#26352b;border:1px solid #405448;padding:9px 13px;border-radius:11px;text-decoration:none;font-size:13px;font-weight:700}
     .hero{background:var(--dark);color:white;padding:28px 0 38px}
     .hero-grid{display:grid;gap:24px;align-items:center}
     .eyebrow{display:inline-flex;background:#173d27;color:#9cf2b5;border:1px solid #245e39;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:750}
@@ -94,7 +94,7 @@
       <span class="logo" aria-hidden="true">↗</span>
       <span>IMPULSO<small>PRÉSTAMOS PERSONALES</small></span>
     </a>
-    <a class="contact" href="#calculadora">Calcular préstamo</a>
+    <div class="contact" aria-label="Capital Ariel">Capital Ariel</div>
   </div>
 </header>
 
@@ -134,12 +134,12 @@
         <div class="field">
           <label for="term">2. Elige el plazo</label>
           <select id="term">
-            <option value="15">Una quincena (15 días) · 10%</option>
-            <option value="30">Un mes · 15%</option>
-            <option value="60">Dos meses · 20%</option>
-            <option value="90">Más de dos meses (ejemplo: 3 meses) · 35% total</option>
+            <option value="15">15 días</option>
+            <option value="30">30 días</option>
+            <option value="60">60 días</option>
+            <option value="90">Más de 60 días</option>
           </select>
-          <p class="hint">El plazo de más de dos meses se muestra como un ejemplo de 3 meses con 35% total, no mensual.</p>
+          <p class="hint">“Más de 60 días” se calcula con el ejemplo configurado de 90 días y 35% total (no mensual).</p>
         </div>
       </div>
       <div class="card">
@@ -193,10 +193,10 @@
           <div class="form-field">
             <label for="loanTerm">Plazo y tasa</label>
             <select id="loanTerm" name="loanTerm" required>
-              <option value="15">15 días · 10%</option>
-              <option value="30">1 mes · 15%</option>
-              <option value="60">2 meses · 20%</option>
-              <option value="90">3 meses (ejemplo) · 35% total</option>
+              <option value="15">15 días</option>
+              <option value="30">30 días</option>
+              <option value="60">60 días</option>
+              <option value="90">Más de 60 días</option>
             </select>
           </div>
           <div class="form-field">
@@ -269,15 +269,14 @@
 </footer>
 
 <script>
-  // IMPORTANTE: reemplaza el valor vacío con tu número completo de WhatsApp en formato internacional,
-  // solo números, sin +, espacios ni guiones. México: normalmente 52 seguido del número.
-  const WHATSAPP_NUMBER = "";
+  // Número de WhatsApp de Capital Ariel en formato internacional: solo números, sin +, espacios ni guiones.
+  const WHATSAPP_NUMBER = "523314493665";
 
   const rates = {
     "15": { rate: 0.10, label: "15 días" },
-    "30": { rate: 0.15, label: "1 mes" },
-    "60": { rate: 0.20, label: "2 meses" },
-    "90": { rate: 0.35, label: "3 meses (ejemplo)" }
+    "30": { rate: 0.15, label: "30 días" },
+    "60": { rate: 0.20, label: "60 días" },
+    "90": { rate: 0.35, label: "Más de 60 días (ejemplo: 90 días)" }
   };
   let amount = 500;
   const money = value => value.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
@@ -293,7 +292,7 @@
     document.getElementById("rate").textContent = `${Math.round(config.rate * 100)}%`;
     document.getElementById("termLabel").textContent = config.label;
 
-    const message = `Hola, quiero consultar un préstamo con IMPULSO. Monto: ${money(amount)}. Plazo: ${config.label}. Tasa ilustrativa: ${Math.round(config.rate * 100)}%. Interés estimado: ${money(interest)}. Total ilustrativo: ${money(total)}. ¿Me puedes confirmar disponibilidad y condiciones?`;
+    const message = `Hola, quiero consultar un préstamo con Capital Ariel. Monto: ${money(amount)}. Plazo: ${config.label}. Tasa ilustrativa: ${Math.round(config.rate * 100)}%. Interés estimado: ${money(interest)}. Total ilustrativo: ${money(total)}. ¿Me puedes confirmar disponibilidad y condiciones?`;
     const link = document.getElementById("whatsappLink");
     link.href = WHATSAPP_NUMBER
       ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`

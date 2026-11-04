@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <meta name="description" content="IMPULSO: consulta opciones de préstamos personales y calcula un total estimado.">
+  <title>IMPULSO | Préstamos personales</title>
+  <style>
+    :root{--bg:#f3f6f4;--ink:#14211a;--muted:#647067;--green:#22c55e;--green-dark:#15803d;--dark:#111827;--card:#fff;--line:#e1e8e3;--soft:#eaf8ee}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+    a{color:inherit}
+    .wrap{width:min(1080px,100% - 32px);margin:auto}
+    header{background:var(--dark);color:#fff;padding:15px 0}
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:850;letter-spacing:.06em}
+    .logo{width:42px;height:42px;border-radius:13px;background:var(--green);display:grid;place-items:center;color:#052e16;font-size:23px}
+    .brand small{display:block;color:#aab7af;font-size:10px;letter-spacing:.13em;font-weight:700}
+    .nav .contact{background:#26352b;border:1px solid #405448;padding:9px 13px;border-radius:11px;text-decoration:none;font-size:13px;font-weight:700}
+    .hero{background:var(--dark);color:white;padding:28px 0 38px}
+    .hero-grid{display:grid;gap:24px;align-items:center}
+    .eyebrow{display:inline-flex;background:#173d27;color:#9cf2b5;border:1px solid #245e39;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:750}
+    h1{font-size:clamp(34px,8vw,58px);line-height:1.04;letter-spacing:-.045em;margin:16px 0}
+    .hero p{color:#cbd5cf;max-width:540px;margin:0 0 20px}
+    .btn{border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:13px;padding:14px 17px;font-size:15px;font-weight:800;text-decoration:none;cursor:pointer}
+    .btn-primary{background:var(--green);color:#052e16}
+    .btn-dark{background:var(--dark);color:white}
+    .hero-note{font-size:12px!important;color:#9ca3af!important;margin-top:12px!important}
+    .hero-panel{border:1px solid #35423a;background:#1b2620;border-radius:22px;padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .stat{background:#253229;border-radius:15px;padding:16px}
+    .stat strong{display:block;font-size:20px;color:white}
+    .stat span{font-size:12px;color:#bac6bd}
+    main{padding:26px 0 44px}
+    .section-title{margin:0 0 7px;font-size:clamp(24px,5vw,32px);letter-spacing:-.025em}
+    .section-desc{margin:0 0 22px;color:var(--muted)}
+    .calculator{display:grid;gap:18px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 7px 24px #12271908}
+    label,.label{display:block;font-weight:750;font-size:14px;margin-bottom:9px}
+    .amount-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+    .amount{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:12px;padding:13px 5px;font-size:15px;font-weight:800;cursor:pointer}
+    .amount[aria-pressed="true"]{background:var(--soft);border:2px solid var(--green-dark);padding:12px 4px;color:#14532d}
+    select,input{width:100%;min-height:48px;padding:12px;border:1px solid #ccd7cf;border-radius:12px;background:#fff;color:var(--ink);font:inherit}
+    .field{margin-top:20px}
+    .hint{font-size:12px;color:var(--muted);margin:8px 0 0}
+    .result{background:var(--soft);border:1px solid #c7ecd1;border-radius:17px;padding:18px;margin-top:18px}
+    .result .caption{font-size:13px;color:#42624b}
+    .total{font-size:clamp(30px,7vw,40px);font-weight:900;letter-spacing:-.04em;color:#14532d;margin:3px 0 8px}
+    .breakdown{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid #d6eadb;font-size:14px}
+    .breakdown:last-child{border-bottom:0}
+    .result .btn{width:100%;margin-top:15px}
+    .notice{font-size:12px;color:var(--muted);margin:13px 0 0}
+    .features{display:grid;gap:12px;margin-top:20px}
+    .feature{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--line);padding:16px;border-radius:16px}
+    .feature-icon{flex:0 0 42px;width:42px;height:42px;display:grid;place-items:center;background:var(--soft);border-radius:12px;font-size:21px}
+    .feature h3{margin:0 0 4px;font-size:16px}
+    .feature p{margin:0;color:var(--muted);font-size:13px}
+    .steps{padding-left:21px;color:var(--muted)}
+    .steps li{padding:4px 0}
+    footer{background:var(--dark);color:#d1d5db;padding:26px 0;font-size:12px}
+    footer strong{color:#fff}
+    footer p{max-width:760px}
+    .footer-row{display:flex;flex-direction:column;gap:8px}
+
+    .form-grid{display:grid;grid-template-columns:1fr;gap:14px}
+    .form-field label{margin-bottom:6px}
+    .form-field small{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+    .checkline{display:flex;align-items:flex-start;gap:10px;margin-top:16px;font-size:13px;color:var(--muted)}
+    .checkline input{width:18px;min-height:18px;flex:0 0 18px;margin-top:2px}
+    .form-actions{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+    .btn-outline{border:1px solid #cbd5ce;background:#fff;color:var(--ink)}
+    .legal-note{background:#fff8e6;border:1px solid #f2d58a;color:#694e0b;padding:14px;border-radius:14px;font-size:13px;margin-top:16px}
+    @media(min-width:700px){.form-grid{grid-template-columns:1fr 1fr}.form-actions{flex-direction:row}.form-actions .btn{flex:1}}
+
+    @media(min-width:700px){
+      .wrap{width:min(1080px,100% - 48px)}
+      .hero{padding:52px 0 58px}
+      .hero-grid{grid-template-columns:1.2fr .8fr;gap:40px}
+      main{padding:42px 0 60px}
+      .calculator{grid-template-columns:1fr 1fr;align-items:start}
+      .features{grid-template-columns:repeat(3,1fr)}
+      .amount-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .card{padding:25px}
+      .footer-row{flex-direction:row;justify-content:space-between;align-items:flex-start}
+    }
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#" aria-label="IMPULSO, inicio">
+      <span class="logo" aria-hidden="true">↗</span>
+      <span>IMPULSO<small>PRÉSTAMOS PERSONALES</small></span>
+    </a>
+    <div class="contact" aria-label="Capital Ariel">Capital Ariel</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">ATENCIÓN PERSONALIZADA</span>
+      <h1>Un apoyo cuando lo necesitas.</h1>
+      <p>Consulta opciones de préstamo, revisa un ejemplo del total a devolver y comunícate para resolver tus dudas.</p>
+      <a class="btn btn-primary" href="#calculadora">Calcular mi préstamo <span aria-hidden="true">↓</span></a>
+      <p class="hero-note">Montos de $500 a $2,000 MXN. Toda solicitud está sujeta a confirmación.</p>
+    </div>
+    <div class="hero-panel" aria-label="Características del servicio">
+      <div class="stat"><strong>$500–$2,000</strong><span>Montos disponibles</span></div>
+      <div class="stat"><strong>4 plazos</strong><span>Opciones ilustrativas</span></div>
+      <div class="stat"><strong>Claro</strong><span>Desglose del cálculo</span></div>
+      <div class="stat"><strong>Directo</strong><span>Consulta personalizada</span></div>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <section id="calculadora">
+    <h2 class="section-title">Calcula tu préstamo</h2>
+    <p class="section-desc">Selecciona un monto y un plazo para ver un ejemplo estimado.</p>
+    <div class="calculator">
+      <div class="card">
+        <span class="label">1. ¿Cuánto necesitas?</span>
+        <div class="amount-grid" id="amountOptions">
+          <button class="amount" type="button" data-amount="500" aria-pressed="true">$500</button>
+          <button class="amount" type="button" data-amount="800" aria-pressed="false">$800</button>
+          <button class="amount" type="button" data-amount="1000" aria-pressed="false">$1,000</button>
+          <button class="amount" type="button" data-amount="1200" aria-pressed="false">$1,200</button>
+          <button class="amount" type="button" data-amount="1500" aria-pressed="false">$1,500</button>
+          <button class="amount" type="button" data-amount="2000" aria-pressed="false">$2,000</button>
+        </div>
+        <div class="field">
+          <label for="term">2. Elige el plazo</label>
+          <select id="term">
+            <option value="15">15 días</option>
+            <option value="30">30 días</option>
+            <option value="60">60 días</option>
+            <option value="90">Más de 60 días</option>
+          </select>
+          <p class="hint">“Más de 60 días” se calcula con el ejemplo configurado de 90 días y 35% total (no mensual).</p>
+        </div>
+      </div>
+      <div class="card">
+        <span class="label">Tu estimación</span>
+        <div class="result" aria-live="polite" aria-atomic="true">
+          <div class="caption">Total ilustrativo a devolver</div>
+          <div class="total" id="total">$550.00</div>
+          <div class="breakdown"><span>Monto solicitado</span><strong id="principal">$500.00</strong></div>
+          <div class="breakdown"><span>Interés estimado</span><strong id="interest">$50.00</strong></div>
+          <div class="breakdown"><span>Tasa aplicada al plazo</span><strong id="rate">10%</strong></div>
+          <div class="breakdown"><span>Plazo seleccionado</span><strong id="termLabel">15 días</strong></div>
+          <a class="btn btn-primary" id="whatsappLink" href="https://wa.me/?text=Hola%2C%20quiero%20consultar%20un%20pr%C3%A9stamo%20con%20IMPULSO." target="_blank" rel="noopener noreferrer">Consultar por WhatsApp ↗</a>
+          <p class="notice">Estimación informativa. El monto, el plazo y las condiciones finales deben confirmarse antes de cualquier acuerdo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section style="margin-top:38px" id="pagare" aria-labelledby="noteTitle">
+    <h2 class="section-title" id="noteTitle">Pagaré digital</h2>
+    <p class="section-desc">Prepara un documento para revisar, imprimir y firmar al formalizar un préstamo.</p>
+    <div class="card">
+      <div class="legal-note"><strong>Importante:</strong> esta función genera un documento imprimible con los datos capturados; no almacena ni envía la información y no garantiza por sí sola que exista una firma electrónica válida o que el pagaré sea exigible. Antes de usarlo para cobrar, revisa el texto y el procedimiento con un profesional del derecho en México.</div>
+      <form id="noteForm">
+        <div class="form-grid" style="margin-top:18px">
+          <div class="form-field">
+            <label for="lenderName">Nombre completo de quien presta</label>
+            <input id="lenderName" name="lenderName" autocomplete="name" required placeholder="Tu nombre completo">
+          </div>
+          <div class="form-field">
+            <label for="borrowerName">Nombre completo de quien recibe</label>
+            <input id="borrowerName" name="borrowerName" autocomplete="name" required placeholder="Nombre del prestatario">
+          </div>
+          <div class="form-field">
+            <label for="issueDate">Fecha de elaboración</label>
+            <input id="issueDate" name="issueDate" type="date" required>
+          </div>
+          <div class="form-field">
+            <label for="dueDate">Fecha límite de pago</label>
+            <input id="dueDate" name="dueDate" type="date" required>
+          </div>
+          <div class="form-field">
+            <label for="loanAmount">Capital del préstamo (MXN)</label>
+            <select id="loanAmount" name="loanAmount" required>
+              <option value="500">$500</option><option value="800">$800</option>
+              <option value="1000">$1,000</option><option value="1200">$1,200</option>
+              <option value="1500">$1,500</option><option value="2000">$2,000</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="loanTerm">Plazo y tasa</label>
+            <select id="loanTerm" name="loanTerm" required>
+              <option value="15">15 días</option>
+              <option value="30">30 días</option>
+              <option value="60">60 días</option>
+              <option value="90">Más de 60 días</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="paymentPlace">Lugar de pago (ciudad y estado)</label>
+            <input id="paymentPlace" name="paymentPlace" placeholder="Ej. Ciudad de México">
+          </div>
+          <div class="form-field">
+            <label for="paymentMethod">Forma de pago acordada</label>
+            <select id="paymentMethod" name="paymentMethod">
+              <option value="Pago único en la fecha pactada">Pago único en la fecha pactada</option>
+              <option value="Transferencia bancaria">Transferencia bancaria</option>
+              <option value="Efectivo contra recibo">Efectivo contra recibo</option>
+              <option value="Otra forma acordada por escrito">Otra forma acordada por escrito</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="lenderSignature">Nombre escrito como firma de quien presta</label>
+            <input id="lenderSignature" name="lenderSignature" required placeholder="Escribe el nombre completo">
+            <small>Escribir un nombre aquí no equivale necesariamente a una firma electrónica legalmente válida.</small>
+          </div>
+          <div class="form-field">
+            <label for="borrowerSignature">Nombre escrito como firma de quien recibe</label>
+            <input id="borrowerSignature" name="borrowerSignature" required placeholder="Escribe el nombre completo">
+            <small>El prestatario debe revisar el documento y firmarlo por un medio apropiado antes de usarlo.</small>
+          </div>
+        </div>
+        <label class="checkline" for="noteConfirm">
+          <input id="noteConfirm" type="checkbox" required>
+          <span>Confirmo que ambas partes revisarán el importe, las fechas, el interés y las condiciones antes de firmar el documento.</span>
+        </label>
+        <div class="form-actions">
+          <button class="btn btn-primary" type="submit">Generar pagaré para imprimir</button>
+          <button class="btn btn-outline" type="button" id="fillFromCalc">Usar datos de la calculadora</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section style="margin-top:38px" aria-labelledby="howTitle">
+    <h2 class="section-title" id="howTitle">¿Cómo funciona?</h2>
+    <p class="section-desc">Un proceso sencillo y transparente.</p>
+    <div class="features">
+      <article class="feature"><div class="feature-icon" aria-hidden="true">①</div><div><h3>Elige tu monto</h3><p>Selecciona una de las cantidades disponibles en la calculadora.</p></div></article>
+      <article class="feature"><div class="feature-icon" aria-hidden="true">②</div><div><h3>Revisa el total</h3><p>Consulta el principal, el interés y el total estimado antes de preguntar.</p></div></article>
+      <article class="feature"><div class="feature-icon" aria-hidden="true">③</div><div><h3>Habla directamente</h3><p>Envía la información por WhatsApp para consultar disponibilidad y condiciones.</p></div></article>
+    </div>
+  </section>
+
+  <section style="margin-top:38px" aria-labelledby="conditionsTitle">
+    <h2 class="section-title" id="conditionsTitle">Información importante</h2>
+    <div class="card">
+      <ul class="steps">
+        <li>La calculadora presenta ejemplos matemáticos, no una aprobación de préstamo.</li>
+        <li>Las tasas mostradas son las configuradas para este prototipo y deben confirmarse antes de ofrecerlas.</li>
+        <li>No envíes contraseñas, NIP ni información bancaria sensible por mensajes.</li>
+        <li>Antes de publicar, agrega tu número de WhatsApp y revisa que todas las condiciones estén claramente definidas.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div><strong>IMPULSO</strong><br>Préstamos personales</div>
+    <div>© <span id="year"></span> IMPULSO · Sitio informativo</div>
+  </div>
+  <div class="wrap">
+    <p>Los importes son ejemplos de cálculo. Este sitio no garantiza la aprobación ni la disponibilidad de un préstamo.</p>
+  </div>
+</footer>
+
+<script>
+  // Número de WhatsApp de Capital Ariel en formato internacional: solo números, sin +, espacios ni guiones.
+  const WHATSAPP_NUMBER = "523314493665";
+
+  const rates = {
+    "15": { rate: 0.10, label: "15 días" },
+    "30": { rate: 0.15, label: "30 días" },
+    "60": { rate: 0.20, label: "60 días" },
+    "90": { rate: 0.35, label: "Más de 60 días (ejemplo: 90 días)" }
+  };
+  let amount = 500;
+  const money = value => value.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
+
+  function updateCalculator() {
+    const term = document.getElementById("term").value;
+    const config = rates[term];
+    const interest = amount * config.rate;
+    const total = amount + interest;
+    document.getElementById("principal").textContent = money(amount);
+    document.getElementById("interest").textContent = money(interest);
+    document.getElementById("total").textContent = money(total);
+    document.getElementById("rate").textContent = `${Math.round(config.rate * 100)}%`;
+    document.getElementById("termLabel").textContent = config.label;
+
+    const message = `Hola, quiero consultar un préstamo con Capital Ariel. Monto: ${money(amount)}. Plazo: ${config.label}. Tasa ilustrativa: ${Math.round(config.rate * 100)}%. Interés estimado: ${money(interest)}. Total ilustrativo: ${money(total)}. ¿Me puedes confirmar disponibilidad y condiciones?`;
+    const link = document.getElementById("whatsappLink");
+    link.href = WHATSAPP_NUMBER
+      ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+      : `https://wa.me/?text=${encodeURIComponent(message)}`;
+  }
+
+  document.querySelectorAll("[data-amount]").forEach(button => {
+    button.addEventListener("click", () => {
+      amount = Number(button.dataset.amount);
+      document.querySelectorAll("[data-amount]").forEach(item => {
+        item.setAttribute("aria-pressed", String(item === button));
+      });
+      updateCalculator();
+    });
+  });
+  document.getElementById("term").addEventListener("change", updateCalculator);
+  document.getElementById("year").textContent = new Date().getFullYear();
+  updateCalculator();
+
+  // El pagaré se genera en una ventana imprimible; los datos no se envían ni se guardan en un servidor.
+  const dateInput = document.getElementById("issueDate");
+  const dueInput = document.getElementById("dueDate");
+  const isoDate = date => {
+    const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  };
+  dateInput.value = isoDate(new Date());
+  function updateDueDate() {
+    const start = dateInput.value ? new Date(dateInput.value + "T12:00:00") : new Date();
+    start.setDate(start.getDate() + Number(document.getElementById("loanTerm").value));
+    dueInput.value = isoDate(start);
+  }
+  dateInput.addEventListener("change", updateDueDate);
+  document.getElementById("loanTerm").addEventListener("change", updateDueDate);
+  updateDueDate();
+
+  document.getElementById("fillFromCalc").addEventListener("click", () => {
+    document.getElementById("loanAmount").value = String(amount);
+    document.getElementById("loanTerm").value = document.getElementById("term").value;
+    updateDueDate();
+    document.getElementById("pagare").scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[char]));
+  const datePretty = value => {
+    if (!value) return "________________";
+    return new Date(value + "T12:00:00").toLocaleDateString("es-MX", {
+      year:"numeric", month:"long", day:"numeric"
+    });
+  };
+  document.getElementById("noteForm").addEventListener("submit", event => {
+    event.preventDefault();
+    if (!event.currentTarget.reportValidity()) return;
+    const lender = document.getElementById("lenderName").value.trim();
+    const borrower = document.getElementById("borrowerName").value.trim();
+    const principal = Number(document.getElementById("loanAmount").value);
+    const term = document.getElementById("loanTerm").value;
+    const config = rates[term];
+    const interest = principal * config.rate;
+    const total = principal + interest;
+    const issue = document.getElementById("issueDate").value;
+    const due = document.getElementById("dueDate").value;
+    const place = document.getElementById("paymentPlace").value.trim() || "Lugar por acordar por escrito";
+    const method = document.getElementById("paymentMethod").value;
+    const lenderSig = document.getElementById("lenderSignature").value.trim();
+    const borrowerSig = document.getElementById("borrowerSignature").value.trim();
+
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      alert("El navegador bloqueó la ventana del documento. Permite ventanas emergentes para este archivo e inténtalo otra vez.");
+      return;
+    }
+    const documentHTML = `<!doctype html><html lang="es-MX"><head><meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1"><title>Pagaré - IMPULSO</title>
+      <style>
+      body{font-family:Arial,sans-serif;color:#111;line-height:1.55;max-width:800px;margin:32px auto;padding:0 24px}
+      h1{text-align:center;letter-spacing:.08em;margin-bottom:4px}h2{font-size:17px;border-bottom:1px solid #aaa;padding-bottom:5px}
+      .subtitle{text-align:center;color:#444;margin-top:0}.amount{border:2px solid #222;padding:14px;text-align:center;margin:22px 0;font-size:19px;font-weight:bold}
+      .terms{border:1px solid #bbb;padding:14px;margin:16px 0}.signatures{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:65px}
+      .sig{border-top:1px solid #222;padding-top:8px;text-align:center;min-height:65px}.muted{font-size:11px;color:#555;margin-top:30px}
+      .print{display:block;margin:20px auto;padding:12px 20px;background:#15803d;color:white;border:0;border-radius:8px;font-size:15px}
+      @media print{body{margin:0 auto;padding:0 10px}.print{display:none}}
+      @media(max-width:560px){.signatures{grid-template-columns:1fr;gap:40px}}
+      </style></head><body>
+      <h1>IMPULSO</h1><p class="subtitle">PAGARÉ / RECONOCIMIENTO DE ADEUDO — BORRADOR PARA REVISIÓN</p>
+      <div class="amount">Capital: ${money(principal)} · Interés ilustrativo: ${money(interest)} · Total: ${money(total)}</div>
+      <p><strong>Fecha de elaboración:</strong> ${escapeHTML(datePretty(issue))}</p>
+      <p><strong>Fecha pactada de pago:</strong> ${escapeHTML(datePretty(due))}</p>
+      <h2>Personas involucradas</h2>
+      <p><strong>Persona que entrega el préstamo:</strong> ${escapeHTML(lender)}</p>
+      <p><strong>Persona que recibe el préstamo:</strong> ${escapeHTML(borrower)}</p>
+      <h2>Reconocimiento y compromiso de pago</h2>
+      <p>La persona que recibe el préstamo declara que recibió de la persona prestamista la cantidad de <strong>${money(principal)} (${principal.toLocaleString("es-MX")} pesos mexicanos)</strong> y manifiesta su compromiso de devolver el importe total indicado en este documento, conforme a las condiciones que ambas partes hayan revisado y aceptado.</p>
+      <div class="terms">
+        <p><strong>Plazo indicado:</strong> ${escapeHTML(config.label)} (${Number(term)} días de referencia).</p>
+        <p><strong>Tasa total ilustrativa:</strong> ${Math.round(config.rate*100)}%.</p>
+        <p><strong>Interés calculado:</strong> ${money(interest)}.</p>
+        <p><strong>Total indicado a pagar:</strong> ${money(total)}.</p>
+        <p><strong>Forma de pago señalada:</strong> ${escapeHTML(method)}.</p>
+        <p><strong>Lugar de pago:</strong> ${escapeHTML(place)}.</p>
+      </div>
+      <p>Las partes deben revisar y acordar de manera expresa la cantidad, el plazo, la fecha de vencimiento y cualquier otra condición aplicable. No se incorporan penalizaciones ni cargos adicionales en este borrador.</p>
+      <div class="signatures">
+        <div class="sig"><strong>${escapeHTML(lenderSig)}</strong><br>Nombre escrito de la persona prestamista<br>Firma por recabar</div>
+        <div class="sig"><strong>${escapeHTML(borrowerSig)}</strong><br>Nombre escrito de la persona prestataria<br>Firma por recabar</div>
+      </div>
+      <p class="muted"><strong>AVISO:</strong> Este documento es un borrador generado automáticamente para revisión. Los nombres escritos en el formulario se imprimen como texto y no constituyen por sí solos una firma electrónica certificada. No se afirma que este formato reúna todos los requisitos legales de un pagaré exigible. Antes de usarlo, obtén revisión jurídica en México y conserva evidencia adecuada de la entrega del dinero y de la aceptación de las condiciones.</p>
+      <button class="print" onclick="window.print()">Imprimir / Guardar como PDF</button>
+      </body></html>`;
+    printWindow.document.open();
+    printWindow.document.write(documentHTML);
+    printWindow.document.close();
+  });
+
+</script>
+</body>
+</html>
